@@ -1,4 +1,5 @@
-using CargaArchivos.Components;
+﻿using CargaArchivos.Components;
+using CargaArchivos.DataBase;
 
 namespace CargaArchivos
 {
@@ -7,6 +8,15 @@ namespace CargaArchivos
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // 🔹 Leer cadena de conexión
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            // 🔹 Registrar tu clase SQLServer e inyectar la connection string
+            builder.Services.AddScoped<SQLServer>(sp =>
+            {
+                return new SQLServer(connectionString!);
+            });
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
